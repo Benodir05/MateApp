@@ -1,61 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-  
-  <script>
-  window.MathJax = {
-    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-    svg: { fontCache: 'global' }
-  };
-</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
-  
-  
   <meta charset="UTF-8">
-  <title>Solver Matemático Interactivo</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+  <title>Ecuación Interactiva</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
-    textarea, input { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
-    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
-    #historial, #ayuda { background: white; padding: 15px; margin-top: 20px; border-radius: 5px; }
-    .contenedor { display: flex; gap: 20px; }
-    .columna { flex: 1; }
-    ul { padding-left: 20px; }
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+
+    .ecuacion {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .lado {
+      display: flex;
+      gap: 10px;
+      min-width: 150px;
+      min-height: 50px;
+      padding: 10px;
+      background: #ffffff;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+    }
+
+    .bloque {
+      padding: 10px 15px;
+      background-color: #d1eaff;
+      border: 2px solid #007acc;
+      border-radius: 5px;
+      cursor: grab;
+      font-weight: bold;
+    }
+
+    .igual {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    h2 {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <h2>🔢 Resolver Problemas Matemáticos</h2>
 
-  <div class="contenedor">
-    <!-- Columna de entrada -->
-    <div class="columna">
-      <textarea id="problema" placeholder="Escribe tu operación, ejemplo: derivative(x^2, x)"></textarea>
-      <button onclick="resolver()">Resolver</button>
-      <div id="resultado"></div>
+  <h2>🔀 Mueve los términos de la ecuación</h2>
+
+  <div class="ecuacion">
+    <div class="lado" id="lado-izquierdo" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" id="t1">+ 2x</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" id="t2">+ 5</div>
     </div>
 
-    <!-- Columna de ayuda -->
-    <div class="columna" id="ayuda">
-      <h3>📘 Cómo escribir funciones:</h3>
-      <ul>
-        <li><b>Derivada:</b> <code>derivative(x^2, x)</code></li>
-        <li><b>Integral:</b> <code>integrate("x^2", "x")</code></li>
-        <li><b>Potencias:</b> <code>x^3</code></li>
-        <li><b>Raíz cuadrada:</b> <code>sqrt(16)</code></li>
-        <li><b>Funciones trigonométricas:</b> <code>sin(pi/2)</code></li>
-        <li><b>Logaritmos:</b> <code>log(100, 10)</code></li>
-        <li><b>Constantes:</b> <code>pi, e</code></li>
-      </ul>
+    <div class="igual">=</div>
+
+    <div class="lado" id="lado-derecho" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" id="t3">+ 9</div>
     </div>
   </div>
 
-  <div id="historial">
-    <h3>📝 Historial de operaciones:</h3>
-    <ul id="listaHistorial"></ul>
-  </div>
+  <script>
+    let bloqueArrastrado = null;
 
-  <script src="script.js"></script>
+    function arrastrar(ev) {
+      bloqueArrastrado = ev.target;
+    }
+
+    function permitirSoltar(ev) {
+      ev.preventDefault(); // Necesario para permitir drop
+    }
+
+    function soltar(ev) {
+      ev.preventDefault();
+      if (bloqueArrastrado) {
+        ev.target.appendChild(bloqueArrastrado);
+      }
+    }
+  </script>
 </body>
 </html>
