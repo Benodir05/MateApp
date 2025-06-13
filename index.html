@@ -8,15 +8,38 @@
     body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
     textarea, input { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
     button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
-    #historial { background: white; padding: 15px; margin-top: 20px; border-radius: 5px; }
+    #historial, #ayuda { background: white; padding: 15px; margin-top: 20px; border-radius: 5px; }
+    .contenedor { display: flex; gap: 20px; }
+    .columna { flex: 1; }
+    ul { padding-left: 20px; }
   </style>
 </head>
 <body>
   <h2>🔢 Resolver Problemas Matemáticos</h2>
-  <textarea id="problema" placeholder="Escribe tu operación, ejemplo: derivative(x^2, x)"></textarea>
-  <button onclick="resolver()">Resolver</button>
-  
-  <div id="resultado"></div>
+
+  <div class="contenedor">
+    <!-- Columna de entrada -->
+    <div class="columna">
+      <textarea id="problema" placeholder="Escribe tu operación, ejemplo: derivative(x^2, x)"></textarea>
+      <button onclick="resolver()">Resolver</button>
+      <div id="resultado"></div>
+    </div>
+
+    <!-- Columna de ayuda -->
+    <div class="columna" id="ayuda">
+      <h3>📘 Cómo escribir funciones:</h3>
+      <ul>
+        <li><b>Derivada:</b> <code>derivative(x^2, x)</code></li>
+        <li><b>Integral:</b> <code>integrate("x^2", "x")</code></li>
+        <li><b>Potencias:</b> <code>x^3</code></li>
+        <li><b>Raíz cuadrada:</b> <code>sqrt(16)</code></li>
+        <li><b>Funciones trigonométricas:</b> <code>sin(pi/2)</code></li>
+        <li><b>Logaritmos:</b> <code>log(100, 10)</code></li>
+        <li><b>Constantes:</b> <code>pi, e</code></li>
+      </ul>
+    </div>
+  </div>
+
   <div id="historial">
     <h3>📝 Historial de operaciones:</h3>
     <ul id="listaHistorial"></ul>
