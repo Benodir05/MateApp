@@ -39,6 +39,7 @@
       font-size: 28px;
       font-weight: bold;
       margin: 0 10px;
+      user-select: none;
     }
 
     .fraccion {
@@ -46,6 +47,7 @@
       flex-direction: column;
       align-items: center;
       border: none;
+      position: relative;
     }
 
     .linea-fraccion {
@@ -62,54 +64,70 @@
     .botones {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
+      gap: 10px;
       flex-wrap: wrap;
+      margin-top: 20px;
     }
 
     button {
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-x {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-weight: bold;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <h2>🔀 Mueve y edita los términos de la ecuación</h2>
+  <h2>🔀 Mueve, edita, elimina o arma tus ecuaciones</h2>
 
   <div class="botones">
-    <button onclick="agregarBloque('lado-izquierdo')">➕ Agregar al lado izquierdo</button>
-    <button onclick="agregarBloque('lado-derecho')">➕ Agregar al lado derecho</button>
+    <button onclick="agregarBloque('lado-izquierdo')">➕ Lado izquierdo</button>
+    <button onclick="agregarBloque('lado-derecho')">➕ Lado derecho</button>
     <button onclick="agregarBloque('numerador')">➕ Numerador</button>
     <button onclick="agregarBloque('denominador')">➕ Denominador</button>
+    <button onclick="agregarFraccion()">➕ Agregar división</button>
+    <button onclick="agregarIgual()">➕ Agregar igualdad</button>
   </div>
 
-  <div class="ecuacion">
+  <div class="ecuacion" id="contenedorEcuacion">
     <div class="lado" id="lado-izquierdo" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 2x</div>
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 5</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 2x</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 5</div>
     </div>
 
     <div class="igual">=</div>
 
-    <!-- Fracción -->
     <div class="fraccion">
+      <button class="btn-x" onclick="eliminar(this.parentElement)">×</button>
       <div class="lado" id="numerador" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">8</div>
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">8</div>
       </div>
       <div class="linea-fraccion"></div>
       <div class="lado" id="denominador" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">1</div>
-        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 2</div>
-        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 3</div>
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">1</div>
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 2</div>
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 3</div>
       </div>
     </div>
 
     <div class="igual">=</div>
 
     <div class="lado" id="lado-derecho" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 9</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 9</div>
     </div>
   </div>
 
@@ -126,7 +144,7 @@
 
     function soltar(ev) {
       ev.preventDefault();
-      if (bloqueArrastrado) {
+      if (bloqueArrastrado && ev.target.classList.contains('lado')) {
         ev.target.appendChild(bloqueArrastrado);
       }
     }
@@ -145,10 +163,64 @@
         nuevoBloque.className = "bloque";
         nuevoBloque.draggable = true;
         nuevoBloque.ondragstart = arrastrar;
-        nuevoBloque.ondblclick = function() { editar(nuevoBloque); };
+        nuevoBloque.ondblclick = function () { editar(nuevoBloque); };
+        nuevoBloque.oncontextmenu = function (e) { eliminar(nuevoBloque, e); };
         nuevoBloque.textContent = contenido.trim();
         document.getElementById(ladoId).appendChild(nuevoBloque);
       }
+    }
+
+    function eliminar(elemento, evento = null) {
+      if (evento) evento.preventDefault();
+      if (confirm("¿Eliminar este elemento?")) {
+        elemento.remove();
+      }
+    }
+
+    function agregarFraccion() {
+      const contenedor = document.getElementById("contenedorEcuacion");
+
+      const fraccion = document.createElement("div");
+      fraccion.className = "fraccion";
+
+      const botonCerrar = document.createElement("button");
+      botonCerrar.textContent = "×";
+      botonCerrar.className = "btn-x";
+      botonCerrar.onclick = function () {
+        eliminar(fraccion);
+      };
+
+      const numerador = document.createElement("div");
+      numerador.className = "lado";
+      numerador.ondrop = soltar;
+      numerador.ondragover = permitirSoltar;
+
+      const linea = document.createElement("div");
+      linea.className = "linea-fraccion";
+
+      const denominador = document.createElement("div");
+      denominador.className = "lado";
+      denominador.ondrop = soltar;
+      denominador.ondragover = permitirSoltar;
+
+      fraccion.appendChild(botonCerrar);
+      fraccion.appendChild(numerador);
+      fraccion.appendChild(linea);
+      fraccion.appendChild(denominador);
+
+      contenedor.appendChild(fraccion);
+    }
+
+    function agregarIgual() {
+      const igual = document.createElement("div");
+      igual.className = "igual";
+      igual.textContent = "=";
+      igual.onclick = function () {
+        if (confirm("¿Eliminar este signo de igualdad?")) {
+          igual.remove();
+        }
+      };
+      document.getElementById("contenedorEcuacion").appendChild(igual);
     }
   </script>
 </body>
