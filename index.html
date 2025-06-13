@@ -101,6 +101,9 @@
   };
 </script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+
+const formulasGuardadas = [];
   
 
 <!-- Modal para ingresar fórmula -->
@@ -222,6 +225,11 @@
   <button class="btn-x" onclick="eliminar(this.parentElement)">×</button>
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 2x</div>
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 5</div>
+
+      <h3>📚 Fórmulas guardadas</h3>
+<div id="listaFormulas" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div>
+
+      
     </div>
 
     <div class="igual" onclick="eliminar(this)">=</div>
@@ -464,6 +472,7 @@ function insertarFormula() {
     return;
   }
 
+ // Insertar en la ecuación
   const bloque = document.createElement("div");
   bloque.className = "bloque";
   bloque.draggable = true;
@@ -471,10 +480,33 @@ function insertarFormula() {
   bloque.ondblclick = function () { editar(bloque); };
   bloque.oncontextmenu = function (e) { eliminar(bloque, e); };
   bloque.innerHTML = `\\(${formula}\\)`;
-
   seccionActualParaFormula.appendChild(bloque);
   MathJax.typesetPromise();
+
+  // Guardar fórmula
+  formulasGuardadas.push(formula);
+  mostrarFormulasGuardadas();
+
   cerrarModalFormula();
+}
+
+
+    function mostrarFormulasGuardadas() {
+  const contenedor = document.getElementById("listaFormulas");
+  contenedor.innerHTML = "";
+  formulasGuardadas.forEach((f, i) => {
+    const div = document.createElement("div");
+    div.className = "bloque";
+    div.innerHTML = `\\(${f}\\)`;
+    div.style.cursor = "pointer";
+    div.onclick = () => {
+      document.getElementById("inputFormula").value = f;
+      document.getElementById("previewFormula").innerHTML = `\\(${f}\\)`;
+      MathJax.typesetPromise();
+    };
+    contenedor.appendChild(div);
+  });
+  MathJax.typesetPromise();
 }
     
     
