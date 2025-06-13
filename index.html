@@ -52,14 +52,14 @@
 
   <div class="ecuacion">
     <div class="lado" id="lado-izquierdo" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" id="t1">+ 2x</div>
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" id="t2">+ 5</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" id="t1">+ 2x</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" id="t2">+ 5</div>
     </div>
 
     <div class="igual">=</div>
 
     <div class="lado" id="lado-derecho" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" id="t3">+ 9</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" id="t3">+ 9</div>
     </div>
   </div>
 
@@ -78,6 +78,13 @@
       ev.preventDefault();
       if (bloqueArrastrado) {
         ev.target.appendChild(bloqueArrastrado);
+      }
+    }
+
+    function editar(bloque) {
+      const nuevoTexto = prompt("Edita el contenido del bloque:", bloque.textContent);
+      if (nuevoTexto !== null && nuevoTexto.trim() !== "") {
+        bloque.textContent = nuevoTexto;
       }
     }
   </script>
