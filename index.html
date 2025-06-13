@@ -1,28 +1,27 @@
-math-solver-app/
-├── backend/                  # API y motor de cálculo
-│   ├── app/
-│   │   ├── main.py           # Punto de entrada (FastAPI)
-│   │   ├── routes/           # Endpoints REST
-│   │   ├── services/         # Lógica de resolución (Sympy)
-│   │   └── models/           # Esquemas Pydantic
-│   ├── Dockerfile            # Contenedor backend
-│   └── requirements.txt      # Dependencias Python
-│
-├── frontend/                 # Interfaz de usuario
-│   ├── public/
-│   ├── src/
-│   │   ├── App.jsx           # Componente principal
-│   │   ├── components/       # InputForm, StepList, HistoryViewer
-│   │   └── services/         # llamadas a la API
-│   ├── Dockerfile            # Contenedor frontend
-│   └── package.json
-│
-├── docs/                     # Documentación adicional
-│   └── architecture.md       # Descripción del flujo y diseño
-│
-├── scripts/                  # Scripts de utilidad (migraciones, etc.)
-│   └── init_db.py
-│
-├── .gitignore
-├── README.md                 # Descripción general e instrucciones de instalación
-└── docker-compose.yml        # Orquestación para desarrollo local
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Solver Matemático Interactivo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
+    textarea, input { width: 100%; margin-top: 10px; padding: 10px; font-size: 16px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+    #historial { background: white; padding: 15px; margin-top: 20px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>🔢 Resolver Problemas Matemáticos</h2>
+  <textarea id="problema" placeholder="Escribe tu operación, ejemplo: derivative(x^2, x)"></textarea>
+  <button onclick="resolver()">Resolver</button>
+  
+  <div id="resultado"></div>
+  <div id="historial">
+    <h3>📝 Historial de operaciones:</h3>
+    <ul id="listaHistorial"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
