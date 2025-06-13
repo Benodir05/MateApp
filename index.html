@@ -231,10 +231,16 @@
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 2x</div>
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 5</div>
 
-      <h3>📚 Fórmulas guardadas</h3>
-<div id="listaFormulas" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div>
+    </div>
 
-      
+
+    <!-- 🆕 Contenedor independiente para las fórmulas guardadas -->
+<div style="margin-top: 30px;">
+  <h3>📚 Fórmulas guardadas</h3>
+  <div id="listaFormulas" style="display: flex; flex-direction: column; gap: 10px;"></div>
+</div>
+
+    
     </div>
 
     <div class="igual" onclick="eliminar(this)">=</div>
@@ -524,15 +530,15 @@ function insertarFormula() {
   const partes = contenedor.querySelectorAll(".bloque");
   let latexCompleto = "";
 
-  partes.forEach(bloque => {
-    // Si es LaTeX renderizado (contiene span.MathJax)
-    if (bloque.innerHTML.includes("MathJax")) {
-      const tex = bloque.textContent;
-      latexCompleto += tex + " ";
-    } else {
-      latexCompleto += bloque.textContent + " ";
-    }
-  });
+partes.forEach(bloque => {
+  const raw = bloque.innerHTML;
+  const match = raw.match(/\\\((.*?)\\\)/); // extrae contenido entre \( ... \)
+  if (match) {
+    latexCompleto += match[1] + " ";
+  } else {
+    latexCompleto += bloque.textContent.trim() + " ";
+  }
+});
 
   latexCompleto = latexCompleto.trim();
   if (latexCompleto) {
