@@ -102,8 +102,6 @@
 </script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
-
-const formulasGuardadas = [];
   
 
 <!-- Modal para ingresar fórmula -->
@@ -145,6 +143,10 @@ const formulasGuardadas = [];
 
 
 <script>
+
+const formulasGuardadas = [];
+
+  
   // Mostrar el teclado cuando se abre el modal
   function abrirModalFormula() {
     const secciones = document.querySelectorAll(".lado");
@@ -218,6 +220,10 @@ const formulasGuardadas = [];
     <button onclick="agregarBloque('denominador')">➕ Denominador</button>
     <button onclick="agregarFraccion()">➕ Agregar división</button>
     <button onclick="agregarIgual()">➕ Agregar igualdad</button>
+
+    <button onclick="guardarFormulaFinal()">✅ Guardar fórmula completa</button>
+
+    
   </div>
 
   <div class="ecuacion" id="contenedorEcuacion">
@@ -491,22 +497,49 @@ function insertarFormula() {
 }
 
 
-    function mostrarFormulasGuardadas() {
+   function mostrarFormulasGuardadas() {
   const contenedor = document.getElementById("listaFormulas");
   contenedor.innerHTML = "";
   formulasGuardadas.forEach((f, i) => {
     const div = document.createElement("div");
     div.className = "bloque";
     div.innerHTML = `\\(${f}\\)`;
+    div.title = "Haz clic para copiar";
     div.style.cursor = "pointer";
     div.onclick = () => {
-      document.getElementById("inputFormula").value = f;
-      document.getElementById("previewFormula").innerHTML = `\\(${f}\\)`;
-      MathJax.typesetPromise();
+      navigator.clipboard.writeText(f);
+      alert("📋 Fórmula copiada:\n" + f);
     };
     contenedor.appendChild(div);
   });
   MathJax.typesetPromise();
+}
+
+
+    function guardarFormulaFinal() {
+  const contenedor = document.getElementById("contenedorEcuacion");
+  const partes = contenedor.querySelectorAll(".bloque");
+  let latexCompleto = "";
+
+  partes.forEach(bloque => {
+    // Si es LaTeX renderizado (contiene span.MathJax)
+    if (bloque.innerHTML.includes("MathJax")) {
+      const tex = bloque.textContent;
+      latexCompleto += tex + " ";
+    } else {
+      latexCompleto += bloque.textContent + " ";
+    }
+  });
+
+  latexCompleto = latexCompleto.trim();
+  if (latexCompleto) {
+    formulasGuardadas.push(latexCompleto);
+    localStorage.setItem("formulasGuardadas", JSON.stringify(formulasGuardadas));
+    mostrarFormulasGuardadas();
+    alert("✅ Fórmula guardada:\n" + latexCompleto);
+  } else {
+    alert("No hay contenido para guardar.");
+  }
 }
     
     
