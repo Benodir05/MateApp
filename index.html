@@ -295,12 +295,14 @@ const formulasGuardadas = [];
       }
     }
 
-    function editar(bloque) {
-      const nuevoTexto = prompt("Edita el contenido del bloque:", bloque.textContent);
-      if (nuevoTexto !== null && nuevoTexto.trim() !== "") {
-        bloque.textContent = nuevoTexto;
-      }
-    }
+   function editar(bloque) {
+  const latexActual = (bloque.innerHTML.match(/\\\((.*?)\\\)/) || [])[1] || bloque.textContent;
+  const nuevoLatex = prompt("Edita el LaTeX del bloque:", latexActual);
+  if (nuevoLatex !== null && nuevoLatex.trim() !== "") {
+    bloque.innerHTML = `\\(${nuevoLatex.trim()}\\)`;
+    MathJax.typesetPromise();
+  }
+}
 
    function agregarBloque(ladoId) {
   const lado = document.getElementById(ladoId);
@@ -505,10 +507,6 @@ function insertarFormula() {
   seccionActualParaFormula.appendChild(bloque);
   MathJax.typesetPromise();
 
-  // Guardar fórmula
-  formulasGuardadas.push(formula);
-  mostrarFormulasGuardadas();
-
   cerrarModalFormula();
 }
 
@@ -551,12 +549,12 @@ function insertarFormula() {
       const bloques = el.querySelectorAll(".bloque");
       for (let b of bloques) {
         const raw = b.innerHTML;
-        const match = raw.match(/\\\((.*?)\\\)/);
-        if (match) {
-          latexCompleto += match[1] + " ";
-        } else {
-          latexCompleto += b.textContent.trim() + " ";
-        }
+        let match = b.innerHTML.match(/\\\((.*?)\\\)/);
+if (match) {
+  latexCompleto += match[1] + " ";
+} else {
+  latexCompleto += b.textContent.trim() + " ";
+}
       }
     } else if (el.classList.contains("igual")) {
       latexCompleto += "= ";
