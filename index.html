@@ -296,7 +296,9 @@ const formulasGuardadas = [];
     }
 
    function editar(bloque) {
-  const latexActual = (bloque.innerHTML.match(/\\\((.*?)\\\)/) || [])[1] || bloque.textContent;
+  let latexActual = bloque.textContent.trim();
+const match = bloque.innerHTML.match(/\\\((.*?)\\\)/);
+if (match) latexActual = match[1];
   const nuevoLatex = prompt("Edita el LaTeX del bloque:", latexActual);
   if (nuevoLatex !== null && nuevoLatex.trim() !== "") {
     bloque.innerHTML = `\\(${nuevoLatex.trim()}\\)`;
@@ -319,7 +321,8 @@ const formulasGuardadas = [];
     nuevoBloque.ondragstart = arrastrar;
     nuevoBloque.ondblclick = function () { editar(nuevoBloque); };
     nuevoBloque.oncontextmenu = function (e) { eliminar(nuevoBloque, e); };
-    nuevoBloque.textContent = contenido.trim();
+    nuevoBloque.innerHTML = `\\(${contenido.trim()}\\)`;
+MathJax.typesetPromise();
     lado.appendChild(nuevoBloque);
   }
 }
@@ -437,7 +440,8 @@ function agregarSeccion() {
       nuevoBloque.ondragstart = arrastrar;
       nuevoBloque.ondblclick = function () { editar(nuevoBloque); };
       nuevoBloque.oncontextmenu = function (e) { eliminar(nuevoBloque, e); };
-      nuevoBloque.textContent = contenido.trim();
+      nuevoBloque.innerHTML = `\\(${contenido.trim()}\\)`;
+MathJax.typesetPromise();
       secciones[indice].appendChild(nuevoBloque);
     }
   } else {
