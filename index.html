@@ -232,17 +232,24 @@
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 5</div>
 
     </div>
-
-
-    <!-- 🆕 Contenedor independiente para las fórmulas guardadas -->
-<div style="margin-top: 30px;">
-  <h3>📚 Fórmulas guardadas</h3>
-  <div id="listaFormulas" style="display: flex; flex-direction: column; gap: 10px;"></div>
-</div>
-
     
     </div>
+  
+<!-- 🆕 Contenedor independiente para las fórmulas guardadas -->
+<div id="zonaFormulasGuardadas" style="margin-top: 40px;">
+  <h3>📚 Fórmulas guardadas</h3>
+  <div id="listaFormulas" style="
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff;
+    padding: 15px;
+    border: 2px dashed #888;
+    border-radius: 10px;">
+  </div>
+</div>
 
+  
     <div class="igual" onclick="eliminar(this)">=</div>
 
     <div class="fraccion">
@@ -509,18 +516,27 @@ function insertarFormula() {
    function mostrarFormulasGuardadas() {
   const contenedor = document.getElementById("listaFormulas");
   contenedor.innerHTML = "";
-  formulasGuardadas.forEach((f, i) => {
+
+  const unicas = [...new Set(formulasGuardadas)]; // Evita duplicados
+
+  unicas.forEach((f) => {
     const div = document.createElement("div");
-    div.className = "bloque";
     div.innerHTML = `\\(${f}\\)`;
-    div.title = "Haz clic para copiar";
+    div.style.padding = "10px";
+    div.style.border = "1px solid #aaa";
+    div.style.borderRadius = "6px";
+    div.style.background = "#eef";
     div.style.cursor = "pointer";
+    div.title = "Haz clic para copiar";
+
     div.onclick = () => {
       navigator.clipboard.writeText(f);
-      alert("📋 Fórmula copiada:\n" + f);
+      alert("📋 Copiado:\n" + f);
     };
+
     contenedor.appendChild(div);
   });
+
   MathJax.typesetPromise();
 }
 
