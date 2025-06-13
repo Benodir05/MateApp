@@ -96,8 +96,6 @@
 
   <div class="botones">
     <button onclick="agregarSeccion()">➕ Agregar sección</button>
-    <button onclick="agregarBloque('lado-izquierdo')">➕ Lado izquierdo</button>
-    <button onclick="agregarBloque('lado-derecho')">➕ Lado derecho</button>
     <button onclick="agregarBloque('numerador')">➕ Numerador</button>
     <button onclick="agregarBloque('denominador')">➕ Denominador</button>
     <button onclick="agregarFraccion()">➕ Agregar división</button>
@@ -159,19 +157,25 @@
       }
     }
 
-    function agregarBloque(ladoId) {
-      const contenido = prompt("Contenido del nuevo bloque:");
-      if (contenido !== null && contenido.trim() !== "") {
-        const nuevoBloque = document.createElement("div");
-        nuevoBloque.className = "bloque";
-        nuevoBloque.draggable = true;
-        nuevoBloque.ondragstart = arrastrar;
-        nuevoBloque.ondblclick = function () { editar(nuevoBloque); };
-        nuevoBloque.oncontextmenu = function (e) { eliminar(nuevoBloque, e); };
-        nuevoBloque.textContent = contenido.trim();
-        document.getElementById(ladoId).appendChild(nuevoBloque);
-      }
-    }
+   function agregarBloque(ladoId) {
+  const lado = document.getElementById(ladoId);
+  if (!lado) {
+    alert("Esa sección ya no existe. Agrega una nueva sección primero.");
+    return;
+  }
+
+  const contenido = prompt("Contenido del nuevo bloque:");
+  if (contenido !== null && contenido.trim() !== "") {
+    const nuevoBloque = document.createElement("div");
+    nuevoBloque.className = "bloque";
+    nuevoBloque.draggable = true;
+    nuevoBloque.ondragstart = arrastrar;
+    nuevoBloque.ondblclick = function () { editar(nuevoBloque); };
+    nuevoBloque.oncontextmenu = function (e) { eliminar(nuevoBloque, e); };
+    nuevoBloque.textContent = contenido.trim();
+    lado.appendChild(nuevoBloque);
+  }
+}
 
     function eliminar(elemento, evento = null) {
       if (evento) evento.preventDefault();
@@ -226,14 +230,20 @@
       document.getElementById("contenedorEcuacion").appendChild(igual);
     }
 
+    
+let contadorSecciones = 0;
 
-    function agregarSeccion() {
+function agregarSeccion() {
   const contenedor = document.getElementById("contenedorEcuacion");
 
   const lado = document.createElement("div");
   lado.className = "lado";
   lado.ondrop = soltar;
   lado.ondragover = permitirSoltar;
+
+  // Asignar un ID único para futuras referencias
+  const nuevoID = "lado-dinamico-" + contadorSecciones++;
+  lado.id = nuevoID;
 
   // Botón para eliminar la sección
   const botonCerrar = document.createElement("button");
@@ -243,11 +253,15 @@
     eliminar(lado);
   };
 
-  // Posicionar el botón dentro del contenedor
   lado.style.position = "relative";
   lado.appendChild(botonCerrar);
 
   contenedor.appendChild(lado);
+
+  // Preguntar si se desea agregar un bloque de inmediato
+  if (confirm("¿Quieres agregar un bloque a esta nueva sección?")) {
+    agregarBloque(nuevoID);
+  }
 }
     
   </script>
