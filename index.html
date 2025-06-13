@@ -108,6 +108,80 @@
   <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:500px; position:relative;">
     <h3>🧮 Escribe tu fórmula en LaTeX</h3>
     <textarea id="inputFormula" placeholder="Ej: x^2 + y^2 = z^2" style="width:100%; padding:10px; font-size:16px;"></textarea>
+
+
+<!-- 🔢 TECLADO MATEMÁTICO PARA FÓRMULAS -->
+<div id="tecladoLatex" style="display:none; flex-wrap: wrap; gap: 5px; margin-top: 10px;">
+  <button onclick="insertarSimbolo('\\frac{}{}')">\(\frac{a}{b}\)</button>
+  <button onclick="insertarSimbolo('^{}')">x^{n}</button>
+  <button onclick="insertarSimbolo('\\sqrt{}')">\(\sqrt{x}\)</button>
+  <button onclick="insertarSimbolo('\\sqrt[n]{}')">\(\sqrt[n]{x}\)</button>
+  <button onclick="insertarSimbolo('\\int_{}^{}')">\(\int\)</button>
+  <button onclick="insertarSimbolo('\\sum_{}^{}')">\(\sum\)</button>
+  <button onclick="insertarSimbolo('\\sin')">\(\sin\)</button>
+  <button onclick="insertarSimbolo('\\cos')">\(\cos\)</button>
+  <button onclick="insertarSimbolo('\\tan')">\(\tan\)</button>
+  <button onclick="insertarSimbolo('\\log')">\(\log\)</button>
+  <button onclick="insertarSimbolo('\\ln')">\(\ln\)</button>
+  <button onclick="insertarSimbolo('\\pi')">\(\pi\)</button>
+  <button onclick="insertarSimbolo('e')">e</button>
+  <button onclick="insertarSimbolo('\\theta')">\(\theta\)</button>
+  <button onclick="insertarSimbolo('\\cdot')">\(\cdot\)</button>
+</div>
+
+<script>
+  // Mostrar el teclado cuando se abre el modal
+  function abrirModalFormula() {
+    const secciones = document.querySelectorAll(".lado");
+    if (secciones.length === 0) {
+      alert("No hay secciones disponibles.");
+      return;
+    }
+
+    let opciones = "";
+    secciones.forEach((sec, index) => {
+      const id = sec.id || `sin-id-${index}`;
+      opciones += `${index + 1}: ${id}\n`;
+    });
+
+    const seleccion = prompt("¿En qué sección querés insertar la fórmula?\n" + opciones);
+    const indice = parseInt(seleccion) - 1;
+
+    if (!isNaN(indice) && secciones[indice]) {
+      seccionActualParaFormula = secciones[indice];
+      document.getElementById("modalFormula").style.display = "flex";
+      document.getElementById("inputFormula").value = "";
+      document.getElementById("previewFormula").innerHTML = "Vista previa...";
+      document.getElementById("tecladoLatex").style.display = "flex"; // Mostrar el teclado
+    } else {
+      alert("Selección inválida.");
+    }
+  }
+
+  // Ocultar teclado al cerrar modal
+  function cerrarModalFormula() {
+    document.getElementById("modalFormula").style.display = "none";
+    document.getElementById("tecladoLatex").style.display = "none";
+    seccionActualParaFormula = null;
+  }
+
+  // Insertar símbolo en textarea
+  function insertarSimbolo(simbolo) {
+    const input = document.getElementById("inputFormula");
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const antes = input.value.substring(0, start);
+    const despues = input.value.substring(end);
+    input.value = antes + simbolo + despues;
+    input.focus();
+    input.selectionStart = input.selectionEnd = start + simbolo.length;
+    input.dispatchEvent(new Event('input'));
+  }
+</script>
+
+
+
+    
     <div id="previewFormula" style="border:1px solid #ccc; border-radius:8px; padding:15px; margin-top:10px; min-height:50px; background:#f9f9f9;">Vista previa...</div>
     <div style="text-align:right; margin-top:10px;">
       <button onclick="cerrarModalFormula()">Cancelar</button>
