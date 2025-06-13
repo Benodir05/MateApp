@@ -575,6 +575,16 @@ if (match) {
     alert("No hay contenido para guardar.");
   }
 }
+
+    // ⏱️ Corrección al cargar: convierte texto plano en bloques a formato LaTeX
+window.addEventListener("DOMContentLoaded", () => {
+  const bloques = document.querySelectorAll(".bloque");
+  bloques.forEach((bloque) => {
+    const texto = bloque.textContent.trim();
+    bloque.innerHTML = `\\(${texto}\\)`;
+  });
+  MathJax.typesetPromise();
+});
     
     
   </script>
