@@ -109,7 +109,7 @@
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 5</div>
     </div>
 
-    <div class="igual">=</div>
+    <div class="igual" onclick="eliminar(this)">=</div>
 
     <div class="fraccion">
       <button class="btn-x" onclick="eliminar(this.parentElement)">×</button>
@@ -124,7 +124,7 @@
       </div>
     </div>
 
-    <div class="igual">=</div>
+    <div class="igual" onclick="eliminar(this)">=</div>
 
     <div class="lado" id="lado-derecho" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" oncontextmenu="eliminar(this, event)">+ 9</div>
