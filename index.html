@@ -95,6 +95,7 @@
   <h2>🔀 Mueve, edita, elimina o arma tus ecuaciones</h2>
 
   <div class="botones">
+    <button onclick="agregarBloqueInteractivo()">➕ Agregar bloque a cualquier sección</button>
     <button onclick="agregarSeccion()">➕ Agregar sección</button>
     <button onclick="agregarBloque('numerador')">➕ Numerador</button>
     <button onclick="agregarBloque('denominador')">➕ Denominador</button>
@@ -261,6 +262,40 @@ function agregarSeccion() {
   // Preguntar si se desea agregar un bloque de inmediato
   if (confirm("¿Quieres agregar un bloque a esta nueva sección?")) {
     agregarBloque(nuevoID);
+  }
+}
+
+
+    function agregarBloqueInteractivo() {
+  const secciones = document.querySelectorAll(".lado");
+  if (secciones.length === 0) {
+    alert("No hay secciones disponibles.");
+    return;
+  }
+
+  let opciones = "";
+  secciones.forEach((sec, index) => {
+    const id = sec.id || `sin-id-${index}`;
+    opciones += `${index + 1}: ${id}\n`;
+  });
+
+  const seleccion = prompt("¿A qué sección quieres agregar el bloque?\n" + opciones);
+  const indice = parseInt(seleccion) - 1;
+
+  if (!isNaN(indice) && secciones[indice]) {
+    const contenido = prompt("Contenido del nuevo bloque:");
+    if (contenido !== null && contenido.trim() !== "") {
+      const nuevoBloque = document.createElement("div");
+      nuevoBloque.className = "bloque";
+      nuevoBloque.draggable = true;
+      nuevoBloque.ondragstart = arrastrar;
+      nuevoBloque.ondblclick = function () { editar(nuevoBloque); };
+      nuevoBloque.oncontextmenu = function (e) { eliminar(nuevoBloque, e); };
+      nuevoBloque.textContent = contenido.trim();
+      secciones[indice].appendChild(nuevoBloque);
+    }
+  } else {
+    alert("Selección inválida.");
   }
 }
     
