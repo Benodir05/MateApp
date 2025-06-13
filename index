@@ -1,0 +1,28 @@
+math-solver-app/
+├── backend/                  # API y motor de cálculo
+│   ├── app/
+│   │   ├── main.py           # Punto de entrada (FastAPI)
+│   │   ├── routes/           # Endpoints REST
+│   │   ├── services/         # Lógica de resolución (Sympy)
+│   │   └── models/           # Esquemas Pydantic
+│   ├── Dockerfile            # Contenedor backend
+│   └── requirements.txt      # Dependencias Python
+│
+├── frontend/                 # Interfaz de usuario
+│   ├── public/
+│   ├── src/
+│   │   ├── App.jsx           # Componente principal
+│   │   ├── components/       # InputForm, StepList, HistoryViewer
+│   │   └── services/         # llamadas a la API
+│   ├── Dockerfile            # Contenedor frontend
+│   └── package.json
+│
+├── docs/                     # Documentación adicional
+│   └── architecture.md       # Descripción del flujo y diseño
+│
+├── scripts/                  # Scripts de utilidad (migraciones, etc.)
+│   └── init_db.py
+│
+├── .gitignore
+├── README.md                 # Descripción general e instrucciones de instalación
+└── docker-compose.yml        # Orquestación para desarrollo local
