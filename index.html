@@ -41,6 +41,20 @@
       margin: 0 10px;
     }
 
+    .fraccion {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: none;
+    }
+
+    .linea-fraccion {
+      width: 100%;
+      height: 2px;
+      background-color: black;
+      margin: 4px 0;
+    }
+
     h2 {
       text-align: center;
     }
@@ -50,6 +64,7 @@
       justify-content: center;
       gap: 20px;
       margin-top: 20px;
+      flex-wrap: wrap;
     }
 
     button {
@@ -66,12 +81,29 @@
   <div class="botones">
     <button onclick="agregarBloque('lado-izquierdo')">➕ Agregar al lado izquierdo</button>
     <button onclick="agregarBloque('lado-derecho')">➕ Agregar al lado derecho</button>
+    <button onclick="agregarBloque('numerador')">➕ Numerador</button>
+    <button onclick="agregarBloque('denominador')">➕ Denominador</button>
   </div>
 
   <div class="ecuacion">
     <div class="lado" id="lado-izquierdo" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 2x</div>
       <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 5</div>
+    </div>
+
+    <div class="igual">=</div>
+
+    <!-- Fracción -->
+    <div class="fraccion">
+      <div class="lado" id="numerador" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">8</div>
+      </div>
+      <div class="linea-fraccion"></div>
+      <div class="lado" id="denominador" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">1</div>
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 2</div>
+        <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 3</div>
+      </div>
     </div>
 
     <div class="igual">=</div>
