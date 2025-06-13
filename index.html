@@ -144,8 +144,6 @@
 
 <script>
 
-const formulasGuardadas = [];
-
   
   // Mostrar el teclado cuando se abre el modal
   function abrirModalFormula() {
@@ -155,6 +153,7 @@ const formulasGuardadas = [];
       return;
     }
 
+    
     let opciones = "";
     secciones.forEach((sec, index) => {
       const id = sec.id || `sin-id-${index}`;
@@ -262,6 +261,10 @@ const formulasGuardadas = [];
   </div>
 
   <script>
+
+const formulasGuardadas = [];
+
+    
     let bloqueArrastrado = null;
 
     function arrastrar(ev) {
