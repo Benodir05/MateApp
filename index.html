@@ -44,22 +44,40 @@
     h2 {
       text-align: center;
     }
+
+    .botones {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <h2>🔀 Mueve los términos de la ecuación</h2>
+  <h2>🔀 Mueve y edita los términos de la ecuación</h2>
+
+  <div class="botones">
+    <button onclick="agregarBloque('lado-izquierdo')">➕ Agregar al lado izquierdo</button>
+    <button onclick="agregarBloque('lado-derecho')">➕ Agregar al lado derecho</button>
+  </div>
 
   <div class="ecuacion">
     <div class="lado" id="lado-izquierdo" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" id="t1">+ 2x</div>
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" id="t2">+ 5</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 2x</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 5</div>
     </div>
 
     <div class="igual">=</div>
 
     <div class="lado" id="lado-derecho" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)" id="t3">+ 9</div>
+      <div class="bloque" draggable="true" ondragstart="arrastrar(event)" ondblclick="editar(this)">+ 9</div>
     </div>
   </div>
 
@@ -71,7 +89,7 @@
     }
 
     function permitirSoltar(ev) {
-      ev.preventDefault(); // Necesario para permitir drop
+      ev.preventDefault();
     }
 
     function soltar(ev) {
@@ -85,6 +103,19 @@
       const nuevoTexto = prompt("Edita el contenido del bloque:", bloque.textContent);
       if (nuevoTexto !== null && nuevoTexto.trim() !== "") {
         bloque.textContent = nuevoTexto;
+      }
+    }
+
+    function agregarBloque(ladoId) {
+      const contenido = prompt("Contenido del nuevo bloque:");
+      if (contenido !== null && contenido.trim() !== "") {
+        const nuevoBloque = document.createElement("div");
+        nuevoBloque.className = "bloque";
+        nuevoBloque.draggable = true;
+        nuevoBloque.ondragstart = arrastrar;
+        nuevoBloque.ondblclick = function() { editar(nuevoBloque); };
+        nuevoBloque.textContent = contenido.trim();
+        document.getElementById(ladoId).appendChild(nuevoBloque);
       }
     }
   </script>
