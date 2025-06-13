@@ -95,6 +95,7 @@
   <h2>🔀 Mueve, edita, elimina o arma tus ecuaciones</h2>
 
   <div class="botones">
+    <button onclick="agregarSeccion()">➕ Agregar sección</button>
     <button onclick="agregarBloque('lado-izquierdo')">➕ Lado izquierdo</button>
     <button onclick="agregarBloque('lado-derecho')">➕ Lado derecho</button>
     <button onclick="agregarBloque('numerador')">➕ Numerador</button>
@@ -222,6 +223,31 @@
       };
       document.getElementById("contenedorEcuacion").appendChild(igual);
     }
+
+
+    function agregarSeccion() {
+  const contenedor = document.getElementById("contenedorEcuacion");
+
+  const lado = document.createElement("div");
+  lado.className = "lado";
+  lado.ondrop = soltar;
+  lado.ondragover = permitirSoltar;
+
+  // Botón para eliminar la sección
+  const botonCerrar = document.createElement("button");
+  botonCerrar.textContent = "×";
+  botonCerrar.className = "btn-x";
+  botonCerrar.onclick = function () {
+    eliminar(lado);
+  };
+
+  // Posicionar el botón dentro del contenedor
+  lado.style.position = "relative";
+  lado.appendChild(botonCerrar);
+
+  contenedor.appendChild(lado);
+}
+    
   </script>
 </body>
 </html>
