@@ -105,29 +105,41 @@
 
 <!-- Modal para ingresar fórmula -->
 <div id="modalFormula" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
-  <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:500px; position:relative;">
+  <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:500px; position:relative; display: flex; flex-direction: column;">
     <h3>🧮 Escribe tu fórmula en LaTeX</h3>
+    
     <textarea id="inputFormula" placeholder="Ej: x^2 + y^2 = z^2" style="width:100%; padding:10px; font-size:16px;"></textarea>
 
 
+
 <!-- 🔢 TECLADO MATEMÁTICO PARA FÓRMULAS -->
-<div id="tecladoLatex" style="display:none; flex-wrap: wrap; gap: 5px; margin-top: 10px;">
-  <button onclick="insertarSimbolo('\\frac{}{}')">\(\frac{a}{b}\)</button>
-  <button onclick="insertarSimbolo('^{}')">x^{n}</button>
-  <button onclick="insertarSimbolo('\\sqrt{}')">\(\sqrt{x}\)</button>
-  <button onclick="insertarSimbolo('\\sqrt[n]{}')">\(\sqrt[n]{x}\)</button>
-  <button onclick="insertarSimbolo('\\int_{}^{}')">\(\int\)</button>
-  <button onclick="insertarSimbolo('\\sum_{}^{}')">\(\sum\)</button>
-  <button onclick="insertarSimbolo('\\sin')">\(\sin\)</button>
-  <button onclick="insertarSimbolo('\\cos')">\(\cos\)</button>
-  <button onclick="insertarSimbolo('\\tan')">\(\tan\)</button>
-  <button onclick="insertarSimbolo('\\log')">\(\log\)</button>
-  <button onclick="insertarSimbolo('\\ln')">\(\ln\)</button>
-  <button onclick="insertarSimbolo('\\pi')">\(\pi\)</button>
-  <button onclick="insertarSimbolo('e')">e</button>
-  <button onclick="insertarSimbolo('\\theta')">\(\theta\)</button>
-  <button onclick="insertarSimbolo('\\cdot')">\(\cdot\)</button>
+<div id="tecladoLatex" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;">
+      <button onclick="insertarSimbolo('\\frac{}{}')">\( \frac{a}{b} \)</button>
+      <button onclick="insertarSimbolo('^{}')">x^{n}</button>
+      <button onclick="insertarSimbolo('\\sqrt{}')">\( \sqrt{x} \)</button>
+      <button onclick="insertarSimbolo('\\sqrt[n]{}')">\( \sqrt[n]{x} \)</button>
+      <button onclick="insertarSimbolo('\\int_{}^{}')">\( \int \)</button>
+      <button onclick="insertarSimbolo('\\sum_{}^{}')">\( \sum \)</button>
+      <button onclick="insertarSimbolo('\\sin')">\( \sin \)</button>
+      <button onclick="insertarSimbolo('\\cos')">\( \cos \)</button>
+      <button onclick="insertarSimbolo('\\tan')">\( \tan \)</button>
+      <button onclick="insertarSimbolo('\\log')">\( \log \)</button>
+      <button onclick="insertarSimbolo('\\ln')">\( \ln \)</button>
+      <button onclick="insertarSimbolo('\\pi')">\( \pi \)</button>
+      <button onclick="insertarSimbolo('e')">e</button>
+      <button onclick="insertarSimbolo('\\theta')">\( \theta \)</button>
+      <button onclick="insertarSimbolo('\\cdot')">\( \cdot \)</button>
+    </div>
+
+    <div id="previewFormula" style="border:1px solid #ccc; border-radius:8px; padding:15px; margin-top:10px; min-height:50px; background:#f9f9f9;">Vista previa...</div>
+    
+    <div style="text-align:right; margin-top:10px;">
+      <button onclick="cerrarModalFormula()">Cancelar</button>
+      <button onclick="insertarFormula()">Insertar fórmula</button>
+    </div>
+  </div>
 </div>
+
 
 <script>
   // Mostrar el teclado cuando se abre el modal
@@ -424,6 +436,9 @@ function abrirModalFormula() {
   if (!isNaN(indice) && secciones[indice]) {
     seccionActualParaFormula = secciones[indice];
     document.getElementById("modalFormula").style.display = "flex";
+    
+    document.getElementById("tecladoLatex").style.display = "flex";
+    
     document.getElementById("inputFormula").value = "";
     document.getElementById("previewFormula").innerHTML = "Vista previa...";
   } else {
