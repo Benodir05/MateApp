@@ -541,20 +541,27 @@ function insertarFormula() {
 }
 
 
-    function guardarFormulaFinal() {
-  const contenedor = document.getElementById("contenedorEcuacion");
-  const partes = contenedor.querySelectorAll(".bloque");
+ function guardarFormulaFinal() {
+  const contenedor = document.querySelector(".ecuacion");
+  const elementos = contenedor.children;
   let latexCompleto = "";
 
-partes.forEach(bloque => {
-  const raw = bloque.innerHTML;
-  const match = raw.match(/\\\((.*?)\\\)/); // extrae contenido entre \( ... \)
-  if (match) {
-    latexCompleto += match[1] + " ";
-  } else {
-    latexCompleto += bloque.textContent.trim() + " ";
+  for (let el of elementos) {
+    if (el.classList.contains("lado") || el.classList.contains("fraccion")) {
+      const bloques = el.querySelectorAll(".bloque");
+      for (let b of bloques) {
+        const raw = b.innerHTML;
+        const match = raw.match(/\\\((.*?)\\\)/);
+        if (match) {
+          latexCompleto += match[1] + " ";
+        } else {
+          latexCompleto += b.textContent.trim() + " ";
+        }
+      }
+    } else if (el.classList.contains("igual")) {
+      latexCompleto += "= ";
+    }
   }
-});
 
   latexCompleto = latexCompleto.trim();
   if (latexCompleto) {
